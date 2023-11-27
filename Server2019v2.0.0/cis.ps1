@@ -4,6 +4,9 @@ Install-WindowsFeature -name Web-Server -IncludeManagementTools
 # Setup directory
 New-Item C:\ImageBuilderWebApp -type Directory
 
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+choco install git -y
+
 # GitHub repository information
 $githubRepoUrl = "https://github.com/Rishabh-Tripathi16/hardening.git"
 $branch = "main"  # Replace with your branch name
@@ -19,8 +22,8 @@ Copy-Item -Path "$($PWD.Path)\$folderToCopy" -Destination $destinationDirectory 
 # Create site
 New-IISSite -Name "ImageBuilderWebApp" -BindingInformation "*:8080:" -PhysicalPath "C:\ImageBuilderWebApp" 
  
-# # Open firewall port for 8080
-# New-NetFirewallRule -DisplayName "Allow Outbound Port 8080" -Direction Inbound -LocalPort 8080 -Protocol TCP -Action Allow
+# Open firewall port for 8080
+New-NetFirewallRule -DisplayName "Allow Outbound Port 8080" -Direction Inbound -LocalPort 8080 -Protocol TCP -Action Allow
 
 cmd.exe /c C:\Server2019v2.0.0\cis.bat
 
