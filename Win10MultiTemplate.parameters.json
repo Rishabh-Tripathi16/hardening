@@ -1,0 +1,82 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "imageTemplateName": {
+            "value": "helloImageTemplateWin01"
+        },
+        "location": {
+            "value": "WestUS2"
+        },
+        "tags": {
+            "value": {
+                "imagebuilderTemplate": "windows11test",
+                "userIdentity": "enabled"
+            }
+        },
+        "userMsiName": {
+            "value": "aibBuiUserId1700403621"
+        },
+        "userMsiResourceGroup": {
+            "value": "myWinImgBuilderRG"
+        },
+        "buildTimeoutInMinutes": {
+            "value":250
+        },
+        "vmSize": {
+            "value": "Standard_D2_v2"
+        },
+       
+        "osDiskSizeGB": {
+            "value": 127
+        },
+        "vnetConfig": {
+            "value": {
+                 "subnetId": "/subscriptions/5beddca6-6c7a-426d-a704-8305f3fb07ab/resourcegroups/myWinImgBuilderRG/providers/Microsoft.Network/virtualNetworks/TestVnetDef/subnets/default",
+                 "ProxyVmSize": "Standard_D2_v2"
+            }
+        },
+        
+        "imageSource": {
+            "value": {
+                "type": "PlatformImage",
+                "publisher": "MicrosoftWindowsServer",
+                "offer": "WindowsServer",
+                "sku": "2019-Datacenter",
+                "version": "latest"
+            }
+        },
+        "customizationSteps": {
+            "value": [
+                {
+                "type": "PowerShell",
+                "name": "CreateBuildPath",
+                "runElevated": false,
+                "scriptUri": "https://github.com/Rishabh-Tripathi16/hardening/blob/main/Server2019v2.0.0/cis.ps1"
+            },
+            {
+                "type": "WindowsRestart",
+                "restartCheckCommand": "echo Azure-Image-Builder-Restarted-the-VM  > c:\\buildArtifacts\\azureImageBuilderRestart.txt",
+                "restartTimeout": "5m"
+            }
+            ]
+        },
+        "distributeSteps": {
+            "value": [
+                {   "type":"SharedImage",
+                    "galleryImageId": "/subscriptions/5beddca6-6c7a-426d-a704-8305f3fb07ab/resourceGroups/myWinImgBuilderRG/providers/Microsoft.Compute/galleries/AIBComputeGallery/images/aibWinImage",
+                    "location": "WestUS2",
+                    "runOutputName": "OutputOfTest",
+                    "artifactTags": {
+                        "source": "azVmImageBuilder",
+                        "baseosimg": "windows2019"
+                    },
+                    "replicationRegions": [
+                        
+                        "westus"
+                    ]
+                }
+            ]
+        }
+    }
+}
