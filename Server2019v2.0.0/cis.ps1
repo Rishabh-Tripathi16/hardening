@@ -19,11 +19,11 @@ Copy-Item -Path "$($PWD.Path)\$folderToCopy" -Destination $destinationDirectory 
 # Create site
 New-IISSite -Name "ImageBuilderWebApp" -BindingInformation "*:8080:" -PhysicalPath "C:\ImageBuilderWebApp" 
  
-# Open firewall port for 8080
-New-NetFirewallRule -DisplayName "Allow Outbound Port 8080" -Direction Inbound -LocalPort 8080 -Protocol TCP -Action Allow
+# # Open firewall port for 8080
+# New-NetFirewallRule -DisplayName "Allow Outbound Port 8080" -Direction Inbound -LocalPort 8080 -Protocol TCP -Action Allow
 
 cmd.exe /c C:\Server2019v2.0.0\cis.bat
 
-# Optionally, remove the cloned repository if you don't need it
-Remove-Item -Path "$($PWD.Path)\YourRepo" -Recurse -Force
+# # Optionally, remove the cloned repository if you don't need it
+# Remove-Item -Path "$($PWD.Path)\YourRepo" -Recurse -Force
 
